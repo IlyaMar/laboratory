@@ -64,6 +64,7 @@
 	// Add a single todo item to the list by creating a view for it, and
     // appending its element to the `<ul>`.
     addOne: function( todo ) {
+		console.log('appView addOne called')
       var view = new app.TodoView({ model: todo });
       $('#todo-list').append( view.render().el );
     },
@@ -72,6 +73,10 @@
     addAll: function() {
       this.$('#todo-list').html('');
       app.Todos.each(this.addOne, this);
+    },
+	
+    filterOne : function (todo) {
+      todo.trigger('visible');
     },
 	
 	filterAll : function () {

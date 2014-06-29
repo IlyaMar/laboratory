@@ -14,13 +14,12 @@
       completed: false
     },
     // Toggle the `completed` state of this todo item.
-    toggle: function() {
-  	  console.log('Todo toggle');
-
-	  this.save({
-        completed: !this.get('completed')
-      });
-    }
+	toggle: function() {
+		console.log('Todo toggle');
+		this.save({
+			completed: !this.get('completed')
+		});
+	}
   });
   
 })();
