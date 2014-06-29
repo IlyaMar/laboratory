@@ -1,0 +1,76 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Backbone.js • TodoMVC</title>
+  <!--link rel="stylesheet" href="assets/base.css"-->
+</head>
+<body>
+
+	<section id="dictionary-app">
+		<header id="header">
+			<h1>Dictionary d1</h1>
+			<input id="new-word-forward" placeholder="new word - forward" autofocus>
+			<input id="new-word-backward" placeholder="new word - backward">
+		</header>
+		<section id="main">
+			<input id="toggle-all" type="checkbox">
+			<label for="toggle-all">Select all</label>
+			<table border="1" class="wordsTable">
+				<tbody id="word-table">
+					<tr>
+						<th>select</th>
+						<th>Forward</th>
+						<th>Backward</th>
+						<th>Destroy</th>
+					</tr>
+				</tbody>
+			</table>
+		</section>
+		<footer id="footer"></footer>
+	</section>
+	
+	
+	<div id="info">
+		<p>Double-click to edit a todo</p>
+	</div>
+
+	<script type="text/template" id="word-template">
+		<input class="toggle" type="checkbox" <%= completed ? 'checked' : '' %> >
+		<td><%- forward %></td>
+		<td><%- backward %></td>
+		<button class="destroy"></button>
+	</script>
+	
+ <script type="text/template" id="stats-template">
+    <span id="todo-count"><strong><%= remaining %></strong> 
+    <%= remaining === 1 ? 'item' : 'items' %> left</span>
+    <ul id="filters">
+      <li>
+        <a class="selected" href="#/">All</a>
+      </li>
+      <li>
+        <a href="#/active">Active</a>
+      </li>
+      <li>
+        <a href="#/completed">Completed</a>
+      </li>
+    </ul>
+   <% if (completed) { %>
+    <button id="clear-completed">Clear completed (<%= completed %>)</button>
+    <% } %>
+  </script>
+  
+  <script src="../lib/jquery.js"></script>
+  <script src="../lib/underscore.js"></script>
+  <script src="../lib/backbone.js"></script>
+  <script src="../lib/backbone.localStorage.js"></script>
+  
+  <script src="models/word.js"></script>
+  <script src="collections/words.js"></script>
+  <script src="views/word.js"></script>
+  <script src="views/app.js"></script>
+  <script src="routers/router.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
