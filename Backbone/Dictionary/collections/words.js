@@ -16,8 +16,8 @@ var app = app || {};
     
 	// Filter down the list of all words that are finished.
     completed: function() {
-      return this.filter(function( todo ) {
-        return todo.get('completed');
+      return this.filter(function( word ) {
+        return word.get('completed');
       });
     },
     
@@ -41,7 +41,7 @@ var app = app || {};
       return todo.get('order');
     }
   });
-  // Create our global collection of **Todos**.
+  // Create our global collection of words.
   app.Words = new WordList();
   
 })();
