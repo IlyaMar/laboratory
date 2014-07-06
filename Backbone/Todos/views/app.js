@@ -80,6 +80,7 @@
     },
 	
 	filterAll : function () {
+		console.log('AppView filterAll')
       app.Todos.each(this.filterOne, this);
     },
 	

@@ -41,6 +41,7 @@
 	},
 
 	toggleVisible : function () {
+		console.log('TodoView toggleVisible')
       this.$el.toggleClass( 'hidden',  this.isHidden());
    },
 	
