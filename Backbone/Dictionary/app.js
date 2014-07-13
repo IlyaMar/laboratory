@@ -3,5 +3,5 @@ var ENTER_KEY = 13;
 
 $(function() {
 	// Kick things off by creating the **App**.
-	new app.AppView();
+	//app.appView = new app.AppView();
 });
