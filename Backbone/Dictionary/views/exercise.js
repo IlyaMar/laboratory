@@ -8,26 +8,40 @@
 		tagName: "div",
 		id: "exercise-view",
 		
+	    template: _.template( $('#exercise-template').html() ),
+	    templateComplete: _.template( $('#exercise-complete-template').html() ),
+
+		wordIndex: 0,
+		
 		events: {
 		  'keypress #new-word-backward': 'createOnEnter',
-		  'click #exercise-correct': 'correct',
-		  'click #toggle-all': 'toggleAllComplete'
+		  'click .correct': 'correct',
+		  'click .next': 'nextWord'
 		},
 		
-		// At initialization we bind to the relevant events on the `Todos`
-		// collection, when items are added or changed.
 		initialize: function() {
-			console.log("ExView init")
-			this.word = app.Words.last()
+			console.log("ExerciseView initialize")
+			this.wordIndex = 0;		// iterate words from start
 			this.render();
 			//this.listenTo(app.Words, 'add', this.addOne);
 			//app.Words.fetch();
 		},
 
 		render: function() {
-			this.$el.html("<h1>" + this.word.get('forward') + "</h1>" + 
-				'<h1 class="hidden">' + this.word.get('backward') + "</h1>"
-			);
+			if (this.wordIndex < app.Words.size()) {
+				var word = app.Words.at(this.wordIndex)
+				this.$el.html(this.template( {'forward' : word.get('forward'), 
+											  'backward' : word.get('backward') })
+											  );
+			}
+			else {
+				this.$el.html(this.templateComplete({'dictionary': 'D1',
+													 'asked': 10,
+													 'correct': 5} ));
+			}
+			//"<h1>" + this.word.get('forward') + "</h1>" + 
+			//	'<h1 class="hidden">' + this.word.get('backward') + "</h1>"
+			//);
 		},
 		
 		correct: function() {
@@ -37,6 +51,8 @@
 		
 		nextWord: function() {
 			console.log("ExView next");
+			this.wordIndex++;
+			this.render();
 		}
   });
 	

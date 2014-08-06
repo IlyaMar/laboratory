@@ -7,34 +7,35 @@
 </head>
 <body>
 
-	<section id="dictionary-app">
-		<header id="header">
-			<h1>Dictionary d1</h1>
-			<input id="new-word-forward" placeholder="new word - forward" autofocus>
-			<input id="new-word-backward" placeholder="new word - backward">
-		</header>
-		<section id="main">
-			<input id="toggle-all" type="checkbox">
-			<label for="toggle-all">Mark all</label>
-			<table border="1" class="wordsTable">
-				<tbody id="word-table">
-					<tr>
-						<th>select</th>
-						<th>Forward</th>
-						<th>Backward</th>
-						<th>Destroy</th>
-					</tr>
-				</tbody>
-			</table>
-		</section>
-		<footer id="footer"></footer>
-	</section>
 	
 	
 	<div id="info">
 		<p>Double-click to edit a todo</p>
 	</div>
 
+	<script type="text/template" id="dict-template">
+			<header id="header">
+				<h1>Dictionary d1</h1>
+				<input id="new-word-forward" placeholder="new word - forward" autofocus>
+				<input id="new-word-backward" placeholder="new word - backward">
+			</header>
+			<section id="main">
+				<input id="toggle-all" type="checkbox">
+				<label for="toggle-all">Mark all</label>
+				<table border="1" class="wordsTable">
+					<tbody id="word-table">
+						<tr>
+							<th>select</th>
+							<th>Forward</th>
+							<th>Backward</th>
+							<th>Destroy</th>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+			<footer id="footer"></footer>
+	</script>
+	
 	<script type="text/template" id="word-template">
 		<td><input class="toggle" type="checkbox" <%= completed ? 'checked' : '' %> ></td>
 		<td><label><%- forward %></label></td>
@@ -63,6 +64,22 @@
     <button id="clear-completed">Clear completed (<%= completed %>)</button>
     <% } %>
   </script>
+
+	<script type="text/template" id="exercise-template">
+		<h1><%- forward %></h1>
+		<h1 class="hidden"><%- backward %></h1>
+		<button class="check">Check</button>
+		<button class="correct">Correct!</button>
+		<button class="next">Next</button>
+	</script>
+
+	<script type="text/template" id="exercise-complete-template">
+		<h1>Dictionary <%- dictionary %> test complete</h1>
+		<h2>words asked <%- asked %></h2>
+		<h2>words correct <%- correct %></h2>
+        <a href="">OK</a>
+	</script>
+	
   
   <script src="../lib/jquery.js"></script>
   <script src="../lib/underscore.js"></script>

@@ -15,14 +15,16 @@ var app = app || {};
 		},
 		
 		initialize: function() {
+			console.log('DictionaryRouter initialize')
 		},
 		
 		default: function() {
 			this.loadView(new app.AppView());
+			document.body.appendChild( this.view.el );
 		},
 		
 		setFilter: function( param ) {
-			console.log('TodoRouter setFilter to ' + param)
+			console.log('DictionaryRouter setFilter to ' + param)
 
 			// Set the current filter to be used
 			app.WordFilter = param || '';
@@ -38,7 +40,7 @@ var app = app || {};
 		},
 		
 		loadView : function(view) {
-			console.log('TodoRouter loadView, view el #' + view.el.id)
+			console.log('DictionaryRouter loadView, view el #' + view.el.id)
 			this.view && (this.view.close ? this.view.close() : this.view.remove());
 			this.view = view;
 		}

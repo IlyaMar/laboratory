@@ -7,11 +7,12 @@
   // ---------------
   // Our overall **AppView** is the top-level piece of UI.
   app.AppView = Backbone.View.extend({
-    // Instead of generating a new element, bind to the existing skeleton of
-    // the app already present in the HTML.
-    el: '#dictionary-app',
+	tagName: "section",
+	id: "dictionary-app",
 	 
-	 // Our template for the line of statistics at the bottom of the app.
+    template: _.template( $('#dict-template').html() ),
+	
+	// Our template for the line of statistics at the bottom of the app.
     statsTemplate: _.template( $('#stats-template').html() ),
     
 	 // Delegated events for creating new items, and clearing completed ones.
@@ -24,24 +25,29 @@
 	// At initialization we bind to the relevant events on the `Todos`
     // collection, when items are added or changed.
     initialize: function() {
+		console.log('AppView initialize');
+	  this.$el.html( this.template() );
       this.allCheckbox = this.$('#toggle-all')[0];
       this.$inputForward = this.$('#new-word-forward');
       this.$inputBackward = this.$('#new-word-backward');
       this.$footer = this.$('#footer');
       this.$main = this.$('#main');
+
+      app.Words.fetch();
 	  
-      this.listenTo(app.Words, 'add', this.addOne);
-      this.listenTo(app.Words, 'reset', this.addAll);
-	  
-	   this.listenTo(app.Words, 'change:completed', this.filterOne);
+	  this.listenTo(app.Words, 'add', this.addOne);
+      this.listenTo(app.Words, 'reset', this.addAll);	  
+	  this.listenTo(app.Words, 'change:completed', this.filterOne);
       this.listenTo(app.Words, 'filter', this.filterAll);
       this.listenTo(app.Words, 'all', this.render);
-      app.Words.fetch();
+	  app.Words.trigger('reset');
     },
     
 	 // Rerendering the app just means refreshing the statistics -- the rest
     // of the app doesn't change.
     render: function() {
+	  console.log('AppView render')
+	
       var completed = app.Words.completed().length;
       var remaining = app.Words.remaining().length;
       if ( app.Words.length ) {
@@ -60,6 +66,7 @@
         this.$footer.hide();
       }
       this.allCheckbox.checked = !remaining;
+	  return this
     },
 	
 	// Add a single todo item to the list by creating a view for it, and
@@ -67,7 +74,7 @@
     addOne: function( todo ) {
 		console.log('AppView addOne')
       var view = new app.WordView({ model: todo });
-      $('#word-table').append( view.render().el );
+      this.$('#word-table').append( view.render().el );
     },
     
 	// Add all items in the **Words** collection at once.
