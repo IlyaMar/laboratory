@@ -16,6 +16,7 @@
 		events: {
 		  'keypress #new-word-backward': 'createOnEnter',
 		  'click .correct': 'correct',
+		  'click .check': 'check',
 		  'click .next': 'nextWord'
 		},
 		
@@ -39,15 +40,16 @@
 													 'asked': 10,
 													 'correct': 5} ));
 			}
-			//"<h1>" + this.word.get('forward') + "</h1>" + 
-			//	'<h1 class="hidden">' + this.word.get('backward') + "</h1>"
-			//);
 		},
 		
 		correct: function() {
 			console.log("ExView correct");
 		},
 		
+		check: function() {
+			console.log("ExView check");
+			this.$('.hidden').removeClass('hidden');
+		},
 		
 		nextWord: function() {
 			console.log("ExView next");
