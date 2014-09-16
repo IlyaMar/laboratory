@@ -7,7 +7,9 @@
 		defaults: {
 			forward: '',
 			backward: '',
-			completed: false		// already learned
+			test_count: 0,
+			correct_count: 0,
+			completed: false		// marked as already learned
 		},
 		// Toggle the `completed` state of this todo item.
 		toggle: function() {

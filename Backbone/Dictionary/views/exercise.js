@@ -44,6 +44,8 @@
 		
 		correct: function() {
 			console.log("ExView correct");
+			var word = app.Words.at(this.wordIndex);
+			word.correct_count++;
 		},
 		
 		check: function() {
@@ -53,6 +55,9 @@
 		
 		nextWord: function() {
 			console.log("ExView next");
+			var word = app.Words.at(this.wordIndex);
+			word.test_count++;
+			
 			this.wordIndex++;
 			this.render();
 		}
