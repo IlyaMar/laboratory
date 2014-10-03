@@ -39,7 +39,16 @@ var app = app || {};
     // Todos are sorted by their original insertion order.
 	comparator: function( todo ) {
       return todo.get('order');
-    }
+    },
+	
+	statistics: function() {
+		var size = this.size();
+		//var 
+	    //this.collection.each(function(log) {
+			//console.log('log item.', log);
+		//});
+	
+	}
   });
   // Create our global collection of words.
   app.Words = new WordList();
