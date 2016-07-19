@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Login test page</title>
+  <meta name="description" content="">
+</head>
+<body>
+	<div class="ibox">
+		<input name="loginEditor"/>
+		<input name="passwordEditor" />
+		<button name="loginButton" onclick="doLogin()">Login</button>
+		<div id="validationSummaryErrors" class="validation-summary-errors" style="display:block;background-color:red;width:200px;height:30px; display:none" />
+	</div>
+
+<script>
+	function showError(){
+		var errorDiv = document.querySelector('div.validation-summary-errors');
+		while(errorDiv.firstChild) {
+			errorDiv.removeChild(errorDiv.firstChild);
+		}
+		errorDiv.innerHTML = "login failed!";
+		errorDiv.style.display = "block";
+	}
+
+
+	function doLogin() {
+		console.log('login button handler');
+		setTimeout(showError, 500);
+		//window.location.assign("content.html")
+	}
+
+	var box = document.querySelector('div.ibox');
+	var observer = new MutationObserver(function(mutations) {
+		console.log(mutations);
+		mutations.forEach(function(mutation) {
+			console.log(mutation);
+		});
+	});
+			
+	observer.observe(box, {
+			attributes: true,
+			childList: true,
+			characterData: false,
+			subtree: true
+	});
+
+</script>
+
+
+</body>
+
+
+
+</html>

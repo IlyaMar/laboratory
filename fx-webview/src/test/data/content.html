@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+
+<script>
+</script>
+
+
+<head>
+  <meta charset="utf-8">
+  <title>Login test page</title>
+  <meta name="description" content="">
+</head>
+<body>
+
+
+<script>
+	console.log('script start');
+	document.addEventListener("DOMContentLoaded", theDomHasLoaded, false);
+
+	
+	/*d = document.createElement('div'); 
+	d.className='portal-page-content';
+	d.style = "display:block;background-color:blue;width:200px;height:40px";
+	document.body.appendChild(d);
+	console.log('content loaded');*/
+
+	/*setTimeout(function (){
+		d = document.createElement('div'); 
+		d.className='portal-page-content';
+		d.style = "display:block;background-color:blue;width:200px;height:40px";
+		document.body.appendChild(d);
+		console.log('content loaded');
+	}, 100);*/
+
+	console.log('script end');
+
+
+	function theDomHasLoaded(e) {
+		d = document.createElement('div'); 
+		d.className='portal-page-content';
+		d.style = "display:block;background-color:blue;width:200px;height:40px";
+		document.body.appendChild(d);
+		console.log('content loaded');
+	}
+	
+	
+/*function doLogin() {
+}*/
+</script>
+
+
+</body>
+
+
+
+</html>
