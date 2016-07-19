@@ -5,6 +5,8 @@ import javafx.concurrent.Worker.State;
 import javafx.scene.web.WebEngine;
 import netscape.javascript.JSObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -18,9 +20,15 @@ public class LoginScenario {
 			System.out.println("hello from js");
 		}
 
-		public void print(JSObject event) {
-			System.out.println("event: " + event);
-			System.out.println("target: " + event.getMember("target"));
+		public void handleEvents(JSObject events) {
+            Integer len = (Integer) events.getMember("length");
+            List<JSObject> list = new ArrayList<>();
+            for (int i =0; i < len; i++) {
+                JSObject e = (JSObject) events.getSlot(i);
+                list.add(e);
+                //System.out.println("event: " + e);
+            }
+            handleMutationEvents(list);
 		}
 	}
 
@@ -32,6 +40,8 @@ public class LoginScenario {
 		String buttonSelector = "document.getElementsByName('loginButton')[0]";
 		String contentSelector = "document.getElementsByClassName('portal-page-content')";
 
+        String loginFailreClass = "validation-summary-errors";
+
 		String testLogin = "5011029307501101001";
 		String testPassword = "rivendell";		
 	}
@@ -40,6 +50,7 @@ public class LoginScenario {
 	private WebEngine e;
 	private Parameters p;
 	private WebProcessor.Response response;
+    private CountDownLatch latchLogin = new CountDownLatch(1);
 
 	LoginScenario(WebProcessor wp) {
 		this(wp, new Parameters());
@@ -103,14 +114,28 @@ public class LoginScenario {
 			throw new Exception("no element by selector: " + selector);
 		return el;
 	}
-	
+
+
+    void handleMutationEvents(List<JSObject> events) {
+        for (JSObject e : events) {
+            JSObject target = (JSObject) e.getMember("target");
+            String cls = (String) target.getMember("className");
+            if (cls.equals(p.loginFailreClass)) {
+                String s = "mutation event on " + target + ", assume login failure";
+                out.println(s);
+                response = new WebProcessor.Response(null, null);
+                latchLogin.countDown();
+            }
+        }
+    }
+
+
 	void doLogin() throws Exception {
 		out.println("logging in");
 
-		CountDownLatch latch = new CountDownLatch(1);
 		wp.setLoadCallback( r -> {
 					saveResponse(r);
-					latch.countDown();
+                    latchLogin.countDown();
 				}
 		);
 
@@ -120,20 +145,11 @@ public class LoginScenario {
 				//JSObject c = (JSObject) e.executeScript(p.contentSelector);
 				e.executeScript("var box = document.querySelector('div.ibox');");
 				e.executeScript("var observer = new MutationObserver(function(mutations) {  \n" +
-						"    console.log(mutations);\n" +
-						"    mutations.forEach(function(mutation) {\n" +
-						"        console.log(mutation);\n" +
-						"    });\n" +
+						"    java.handleEvents(mutations);\n" +
 						"  });\n");
-				e.executeScript("  observer.observe(box, {
-						attributes: true,
-						childList: true,
-						characterData: false,
-						subtree: true
-			});"
+				e.executeScript("observer.observe(box, {attributes: true, childList: true, characterData: false, subtree: true });");
 
-
-			out.println("filling login");
+				out.println("filling login");
                 JSObject login = findElement(p.loginSelector);
                 login.setMember("value", p.testLogin);
 
@@ -148,12 +164,12 @@ public class LoginScenario {
             catch (Exception e) {
                 out.println("exception in js!");
                 response = new WebProcessor.Response(e, null);
-				latch.countDown();
+                latchLogin.countDown();
             }
         });
 
 		out.println("waiting for login...");
-		latch.await();
+        latchLogin.await();
 		response.check();
 	}
 
