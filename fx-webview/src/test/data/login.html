@@ -26,8 +26,11 @@
 
 	function doLogin() {
 		console.log('login button handler');
-		setTimeout(showError, 500);
-		//window.location.assign("content.html")
+		var testSuccess = true;
+		if (testSuccess)
+			window.location.assign("content.html")
+		else
+			setTimeout(showError, 500);		
 	}
 
 	var box = document.querySelector('div.ibox');
@@ -35,7 +38,10 @@
 		console.log(mutations);
 		mutations.forEach(function(mutation) {
 			console.log(mutation);
+			//if (addedNodes.addedNodes.length()
+			
 		});
+		debugger;
 	});
 			
 	observer.observe(box, {

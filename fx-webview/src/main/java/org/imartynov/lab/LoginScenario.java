@@ -33,8 +33,8 @@ public class LoginScenario {
 	}
 
 	static class Parameters {
-		//String loginUrl = "https://portal.fedsfm.ru/Account/login";
-		String loginUrl = "file:///b:/Project/laboratory/fx-webview/src/test/data/login.html";
+		String loginUrl = "https://portal.fedsfm.ru/Account/login";
+		//String loginUrl = "file:///b:/Project/laboratory/fx-webview/src/test/data/login.html";
 		String loginSelector = "document.getElementsByName('loginEditor')[0]";
 		String passwordSelector = "document.getElementsByName('passwordEditor')[0]";
 		String buttonSelector = "document.getElementsByName('loginButton')[0]";
@@ -76,9 +76,9 @@ public class LoginScenario {
 		// loading login form
 		CountDownLatch latch = new CountDownLatch(1);
 		wp.setLoadCallback(r -> {
-					saveResponse(r);
-					latch.countDown();
-				}
+				saveResponse(r);
+				latch.countDown();
+			}
 		);
 		Platform.runLater(() -> {
 			out.println("loading url");
@@ -104,7 +104,7 @@ public class LoginScenario {
 		out.println("login submitted");
 
 		doCheckLogined();
-		out.println("login success!");
+		out.println("test success!");
 	}
 	
 	
@@ -123,8 +123,9 @@ public class LoginScenario {
             if (cls.equals(p.loginFailreClass)) {
                 String s = "mutation event on " + target + ", assume login failure";
                 out.println(s);
-                response = new WebProcessor.Response(null, null);
+                response = new WebProcessor.Response(new Exception("login failure, please check login/password"));
                 latchLogin.countDown();
+				//return;
             }
         }
     }
@@ -142,7 +143,6 @@ public class LoginScenario {
 		Platform.runLater(() -> {
             try {
 				// set up change listener
-				//JSObject c = (JSObject) e.executeScript(p.contentSelector);
 				e.executeScript("var box = document.querySelector('div.ibox');");
 				e.executeScript("var observer = new MutationObserver(function(mutations) {  \n" +
 						"    java.handleEvents(mutations);\n" +
@@ -163,7 +163,7 @@ public class LoginScenario {
             }
             catch (Exception e) {
                 out.println("exception in js!");
-                response = new WebProcessor.Response(e, null);
+                response = new WebProcessor.Response(e);
                 latchLogin.countDown();
             }
         });
@@ -173,20 +173,20 @@ public class LoginScenario {
 		response.check();
 	}
 
-	void doCheckLogined() {
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				out.println("checking content...");
-				JSObject c = (JSObject) e.executeScript(p.contentSelector);
-				Integer l = (Integer) c.getMember("length");
-				out.println("portal content length: " + l);
-				/*if (l == 1)
-					wp.setResponseSuccess();
-				else
-					wp.setResponse(new WebProcessor.Response(new Exception("content check failed, entries found: " + l), null));*/
-			}
+	void doCheckLogined() throws InterruptedException {
+		CountDownLatch latch = new CountDownLatch(1);
+		Platform.runLater(() -> {
+			out.println("checking content...");
+			JSObject c = (JSObject) e.executeScript(p.contentSelector);
+			Integer l = (Integer) c.getMember("length");
+			out.println("portal content length: " + l);
+			if (l == 1)
+				out.println("log in success");
+			else
+				response = new WebProcessor.Response("login in unsuccess, portal content length: " + l);
+			latch.countDown();
 		});
+		latch.await();
 	}
 
 }
